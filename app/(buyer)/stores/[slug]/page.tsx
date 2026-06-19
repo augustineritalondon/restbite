@@ -1,8 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, MapPin, Star, Clock, Truck, ShoppingBag, Tag } from 'lucide-react'
+import { ArrowLeft, MapPin, Star, Clock, Truck, ShoppingBag, Tag, Heart } from 'lucide-react'
 import { STORES } from '@/lib/stores'
 import { PRODUCTS, expiryLabel } from '@/lib/products'
 
@@ -10,6 +11,7 @@ export default function StoreDetailPage() {
   const { slug } = useParams<{ slug: string }>()
   const router = useRouter()
   const store = STORES.find(s => s.slug === slug)
+  const [isFollowing, setIsFollowing] = useState(false)
 
   if (!store) {
     return (
@@ -32,21 +34,35 @@ export default function StoreDetailPage() {
       <div className="relative h-56 sm:h-72 overflow-hidden bg-[#15151F]">
         <img src={store.image} alt={store.name} className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0F] via-[#0A0A0F]/40 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-6">
-          <button onClick={() => router.back()} className="flex items-center gap-2 text-xs text-white/70 hover:text-white mb-4 transition-colors">
-            <ArrowLeft size={14} /> Back
-          </button>
-          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">{store.name}</h1>
-          <div className="flex items-center gap-3 mt-1 flex-wrap">
-            <span className="flex items-center gap-1 text-sm font-semibold text-white/80">
-              <Star size={13} fill="var(--brand)" color="var(--brand)" />
-              {store.rating}
-            </span>
-            <span className="text-white/40 text-xs">·</span>
-            <span className="text-xs text-white/60">{store.reviewCount} reviews</span>
-            <span className="text-white/40 text-xs">·</span>
-            <span className="text-xs text-white/60">{store.distanceKm}km away</span>
+        <div className="absolute bottom-0 left-0 right-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-6 flex items-end justify-between gap-4 flex-wrap">
+          <div>
+            <button onClick={() => router.back()} className="flex items-center gap-2 text-xs text-white/70 hover:text-white mb-4 transition-colors">
+              <ArrowLeft size={14} /> Back
+            </button>
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">{store.name}</h1>
+            <div className="flex items-center gap-3 mt-1 flex-wrap">
+              <span className="flex items-center gap-1 text-sm font-semibold text-white/80">
+                <Star size={13} fill="var(--brand)" color="var(--brand)" />
+                {store.rating}
+              </span>
+              <span className="text-white/40 text-xs">·</span>
+              <span className="text-xs text-white/60">{store.reviewCount} reviews</span>
+              <span className="text-white/40 text-xs">·</span>
+              <span className="text-xs text-white/60">{store.distanceKm}km away</span>
+            </div>
           </div>
+          
+          <button 
+            onClick={() => setIsFollowing(!isFollowing)}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-all"
+            style={isFollowing 
+              ? { background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid rgba(255,255,255,0.2)' }
+              : { background: 'var(--brand)', color: 'var(--background)' }
+            }
+          >
+            <Heart size={16} fill={isFollowing ? 'white' : 'transparent'} />
+            {isFollowing ? 'Following' : 'Follow Store'}
+          </button>
         </div>
       </div>
 

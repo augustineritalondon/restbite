@@ -1,34 +1,16 @@
-import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request })
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll()
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value)
-          )
-          supabaseResponse = NextResponse.next({ request })
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          )
-        },
-      },
+  let user = null
+  const mockCookie = request.cookies.get('restbite_mock_user')?.value
+  
+  if (mockCookie) {
+    try {
+      user = JSON.parse(decodeURIComponent(mockCookie))
+    } catch (e) {
+      // invalid cookie
     }
-  )
-
-  // Refresh session — do NOT add any logic between createServerClient and getUser
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  }
 
   const { pathname } = request.nextUrl
 
@@ -45,10 +27,25 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith('/auth/register') ||
     pathname.startsWith('/auth/forgot-password')
 
+  // Buyer protected routes
+  const isBuyerProtectedRoute = 
+    pathname.startsWith('/profile') || 
+    pathname.includes('/checkout') || 
+    pathname.includes('/success')
+
   // Redirect unauthenticated users away from protected routes
   if (isDashboardRoute && !user) {
     const url = request.nextUrl.clone()
     url.pathname = '/auth/login'
+    return NextResponse.redirect(url)
+  }
+
+  // Redirect unauthenticated buyers away from protected buyer routes
+  if (isBuyerProtectedRoute && !user) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/auth/login'
+    // Optional: add a ?next= query param
+    url.searchParams.set('next', pathname)
     return NextResponse.redirect(url)
   }
 
@@ -74,7 +71,7 @@ export async function updateSession(request: NextRequest) {
 
   // Redirect authenticated users away from auth pages to appropriate dashboard
   if (user && isAuthRoute) {
-    const role = user.user_metadata?.role as string | undefined
+    const role = user?.user_metadata?.role as string | undefined
     const url = request.nextUrl.clone()
 
     if (role === 'seller') url.pathname = '/seller/dashboard'
@@ -85,5 +82,5 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  return supabaseResponse
+  return NextResponse.next({ request })
 }

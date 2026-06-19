@@ -6,11 +6,13 @@ import Link from 'next/link'
 import { ArrowLeft, MapPin, Star, Clock, Truck, ShoppingBag, Heart, ChevronLeft, ChevronRight, AlertCircle, Package } from 'lucide-react'
 import { PRODUCTS, expiryLabel } from '@/lib/products'
 import { storeSlug } from '@/lib/stores'
+import { useCartStore } from '@/lib/store/cartStore'
 
 export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>()
   const router = useRouter()
   const product = PRODUCTS.find(p => p.id === id)
+  const { addItem } = useCartStore()
 
   const [qty, setQty] = useState(1)
   const [saved, setSaved] = useState(false)
@@ -225,12 +227,27 @@ export default function ProductDetailPage() {
             </div>
 
             {/* CTA */}
-            <button
-              className="w-full py-4 rounded-2xl text-sm font-black tracking-wide transition-all duration-150 hover:scale-[0.98] hover:brightness-95"
-              style={{ background: 'var(--brand)', color: 'var(--background)' }}
-            >
-              Order from this store — ₦{(product.price * qty).toLocaleString()}
-            </button>
+            <div className="flex gap-3">
+              <button
+                onClick={() => {
+                  addItem(product, qty)
+                  // Optional: add a small toast/notification here later
+                }}
+                className="flex-1 py-4 rounded-2xl text-sm font-black tracking-wide border border-[var(--border2)] transition-all duration-150 hover:border-[var(--brand)] hover:text-[var(--brand)] bg-transparent text-foreground flex items-center justify-center gap-2"
+              >
+                <ShoppingBag size={16} /> Add to cart
+              </button>
+              <button
+                onClick={() => {
+                  addItem(product, qty)
+                  router.push(`/stores/${storeSlug(product.store)}/checkout`)
+                }}
+                className="flex-1 py-4 rounded-2xl text-sm font-black tracking-wide transition-all duration-150 hover:scale-[0.98] hover:brightness-95"
+                style={{ background: 'var(--brand)', color: 'var(--background)' }}
+              >
+                Checkout now
+              </button>
+            </div>
           </div>
         </div>
 
