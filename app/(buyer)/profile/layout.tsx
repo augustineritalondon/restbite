@@ -2,7 +2,10 @@
 
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Package, Heart, Settings, LogOut } from 'lucide-react'
+import { useAuthStore } from '@/lib/store/authStore'
+import { SignOutButton } from '@/components/shared/SignOutButton'
 
 const PROFILE_NAV = [
   { href: '/profile/orders', label: 'My Orders', icon: Package },
@@ -12,6 +15,7 @@ const PROFILE_NAV = [
 
 export default function ProfileLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
+  const user = useAuthStore((state) => state.user)
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-24">
@@ -23,12 +27,16 @@ export default function ProfileLayout({ children }: { children: React.ReactNode 
             
             {/* User Info Snippet (Desktop) */}
             <div className="hidden md:flex items-center gap-3 mb-8 px-4">
-              <div className="w-12 h-12 rounded-full bg-[var(--brand)] flex items-center justify-center text-black font-black text-lg">
-                R
+              <div className="w-12 h-12 rounded-full bg-surface border border-border flex items-center justify-center font-black text-lg relative overflow-hidden text-[var(--brand)]">
+                {user?.user_metadata?.avatar_url ? (
+                  <Image src={user.user_metadata.avatar_url} alt="Avatar" fill className="object-cover" />
+                ) : (
+                  user?.user_metadata?.full_name?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'U'
+                )}
               </div>
               <div>
-                <h2 className="font-bold text-foreground">Rita London</h2>
-                <p className="text-xs text-muted-foreground">demo@restbite.app</p>
+                <h2 className="font-bold text-foreground line-clamp-1">{user?.user_metadata?.full_name || 'Loading...'}</h2>
+                <p className="text-xs text-muted-foreground line-clamp-1">{user?.email}</p>
               </div>
             </div>
 
@@ -54,15 +62,9 @@ export default function ProfileLayout({ children }: { children: React.ReactNode 
               })}
               
               <div className="hidden md:block my-4 border-t border-border" />
-              
-              <Link
-                href="/auth/login"
-                onClick={() => { document.cookie = "demo_buyer_auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;" }}
-                className="hidden md:flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-muted-foreground hover:bg-surface hover:text-[var(--urgency)] transition-colors"
-              >
-                <LogOut size={18} />
-                Sign Out
-              </Link>
+              <div className="hidden md:block">
+                <SignOutButton className="flex w-full items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-muted-foreground hover:bg-surface hover:text-[var(--urgency)] transition-colors" iconSize={18} />
+              </div>
             </nav>
           </div>
         </aside>

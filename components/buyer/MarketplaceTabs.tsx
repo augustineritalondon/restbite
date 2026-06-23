@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { Heart, Armchair } from 'lucide-react'
+import Link from 'next/link'
 
 // Intersection Observer Hook for scroll reveal
 function useScrollReveal() {
@@ -35,8 +36,25 @@ export function MarketplaceTabs() {
   const [activeTab, setActiveTab] = useState<'market' | 'dining'>('market')
   const sectionRef = useScrollReveal()
 
+  useEffect(() => {
+    const handleHashChange = () => {
+      if (window.location.hash === '#dining') {
+        setActiveTab('dining')
+      } else if (window.location.hash === '#market') {
+        setActiveTab('market')
+      }
+    }
+    
+    // Check on initial load
+    handleHashChange()
+
+    // Listen for hash changes
+    window.addEventListener('hashchange', handleHashChange)
+    return () => window.removeEventListener('hashchange', handleHashChange)
+  }, [])
+
   return (
-    <section id="market" ref={sectionRef} className="py-16 px-8 max-w-5xl mx-auto">
+    <section id="dining" ref={sectionRef} className="py-16 px-8 max-w-5xl mx-auto">
       <div className="text-[11px] font-bold tracking-widest uppercase mb-3" style={{ color: 'var(--brand)' }}>Market</div>
       <h2 className="text-[clamp(24px,3.5vw,40px)] font-extrabold tracking-tight mb-4 leading-[1.15] scroll-reveal opacity-0 translate-y-8 transition-all duration-700 ease-out">
         Near-expiry groceries.<br/>Real discounts.
@@ -234,45 +252,56 @@ export function MarketplaceTabs() {
 
         {/* Dining Tab */}
         {activeTab === 'dining' && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 animate-fade-up">
-            {/* Session 1 */}
-            <div className="bg-card border border-border rounded-2xl p-5 cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:border-[rgba(155,109,255,0.3)]">
-              <div className="flex justify-between items-start mb-3">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg bg-[rgba(155,109,255,0.1)] border border-[rgba(155,109,255,0.2)]">🍲</div>
-                <div className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[rgba(155,109,255,0.1)] text-[var(--dining)] border border-[rgba(155,109,255,0.2)] tracking-wider">OPEN NOW</div>
-              </div>
-              <div className="text-[15px] font-bold text-foreground mb-0.5">Native Tray</div>
-              <div className="text-[11px] text-muted-foreground">Nigerian · local cuisine · GRA Phase 2</div>
-              <div className="h-[3px] bg-white/5 rounded-full mt-3 overflow-hidden">
-                <div className="h-full bg-[var(--dining)] rounded-full transition-all duration-500 w-[60%]"></div>
-              </div>
-              <div className="flex items-center gap-2.5 mt-3 pt-3 border-t border-border">
-                <div className="text-[12px] font-semibold flex items-center gap-1" style={{ color: 'var(--live)' }}>
-                  <Armchair size={13} /> 8 left
+          <div className="space-y-6 animate-fade-up">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              {/* Session 1 */}
+              <Link href="/restaurants" className="block bg-card border border-border rounded-2xl p-5 cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:border-[rgba(155,109,255,0.3)]">
+                <div className="flex justify-between items-start mb-3">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg bg-[rgba(155,109,255,0.1)] border border-[rgba(155,109,255,0.2)]">🍲</div>
+                  <div className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[rgba(155,109,255,0.1)] text-[var(--dining)] border border-[rgba(155,109,255,0.2)] tracking-wider">OPEN NOW</div>
                 </div>
-                <div className="text-[11px] text-muted-foreground">Closes 10:30pm</div>
-                <div className="text-[17px] font-extrabold ml-auto" style={{ color: 'var(--brand)' }}>50% OFF</div>
-              </div>
-            </div>
+                <div className="text-[15px] font-bold text-foreground mb-0.5">Native Tray</div>
+                <div className="text-[11px] text-muted-foreground">Nigerian · local cuisine · GRA Phase 2</div>
+                <div className="h-[3px] bg-white/5 rounded-full mt-3 overflow-hidden">
+                  <div className="h-full bg-[var(--dining)] rounded-full transition-all duration-500 w-[60%]"></div>
+                </div>
+                <div className="flex items-center gap-2.5 mt-3 pt-3 border-t border-border">
+                  <div className="text-[12px] font-semibold flex items-center gap-1" style={{ color: 'var(--live)' }}>
+                    <Armchair size={13} /> 8 left
+                  </div>
+                  <div className="text-[11px] text-muted-foreground">Closes 10:30pm</div>
+                  <div className="text-[17px] font-extrabold ml-auto" style={{ color: 'var(--brand)' }}>50% OFF</div>
+                </div>
+              </Link>
 
-            {/* Session 2 */}
-            <div className="bg-card border border-border rounded-2xl p-5 cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:border-[rgba(155,109,255,0.3)]">
-              <div className="flex justify-between items-start mb-3">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg bg-[rgba(155,109,255,0.1)] border border-[rgba(155,109,255,0.2)]">🍛</div>
-                <div className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[rgba(155,109,255,0.1)] text-[var(--dining)] border border-[rgba(155,109,255,0.2)] tracking-wider">OPEN NOW</div>
-              </div>
-              <div className="text-[15px] font-bold text-foreground mb-0.5">Kilimanjaro</div>
-              <div className="text-[11px] text-muted-foreground">Continental · fast food · Peter Odili Road</div>
-              <div className="h-[3px] bg-white/5 rounded-full mt-3 overflow-hidden">
-                <div className="h-full bg-[var(--dining)] rounded-full transition-all duration-500 w-[75%]"></div>
-              </div>
-              <div className="flex items-center gap-2.5 mt-3 pt-3 border-t border-border">
-                <div className="text-[12px] font-semibold flex items-center gap-1" style={{ color: 'var(--live)' }}>
-                  <Armchair size={13} /> 5 left
+              {/* Session 2 */}
+              <Link href="/restaurants" className="block bg-card border border-border rounded-2xl p-5 cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:border-[rgba(155,109,255,0.3)]">
+                <div className="flex justify-between items-start mb-3">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg bg-[rgba(155,109,255,0.1)] border border-[rgba(155,109,255,0.2)]">🍛</div>
+                  <div className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[rgba(155,109,255,0.1)] text-[var(--dining)] border border-[rgba(155,109,255,0.2)] tracking-wider">OPEN NOW</div>
                 </div>
-                <div className="text-[11px] text-muted-foreground">Closes 9:45pm</div>
-                <div className="text-[17px] font-extrabold ml-auto" style={{ color: 'var(--brand)' }}>40% OFF</div>
-              </div>
+                <div className="text-[15px] font-bold text-foreground mb-0.5">Kilimanjaro</div>
+                <div className="text-[11px] text-muted-foreground">Continental · fast food · Peter Odili Road</div>
+                <div className="h-[3px] bg-white/5 rounded-full mt-3 overflow-hidden">
+                  <div className="h-full bg-[var(--dining)] rounded-full transition-all duration-500 w-[75%]"></div>
+                </div>
+                <div className="flex items-center gap-2.5 mt-3 pt-3 border-t border-border">
+                  <div className="text-[12px] font-semibold flex items-center gap-1" style={{ color: 'var(--live)' }}>
+                    <Armchair size={13} /> 5 left
+                  </div>
+                  <div className="text-[11px] text-muted-foreground">Closes 9:45pm</div>
+                  <div className="text-[17px] font-extrabold ml-auto" style={{ color: 'var(--brand)' }}>40% OFF</div>
+                </div>
+              </Link>
+            </div>
+            
+            <div className="flex justify-center mt-6">
+              <Link 
+                href="/restaurants"
+                className="text-sm font-semibold text-[var(--dining)] hover:text-white transition-colors border border-[var(--dining)] hover:bg-[var(--dining)] px-6 py-2.5 rounded-full"
+              >
+                See all dining sessions →
+              </Link>
             </div>
           </div>
         )}

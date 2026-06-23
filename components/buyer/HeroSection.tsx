@@ -85,7 +85,7 @@ export function HeroSection() {
             Browse deals
           </Link>
           <Link 
-            href="#dining"
+            href="/restaurants"
             className="text-sm font-medium px-6 py-3 rounded-full border border-[var(--border2)] cursor-pointer transition-all duration-150 hover:border-[var(--brand)] hover:text-[var(--brand)] bg-transparent text-foreground"
           >
             Find dining sessions

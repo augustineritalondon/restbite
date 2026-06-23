@@ -1,17 +1,20 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X, ShoppingCart } from 'lucide-react'
+import { Menu, X, ShoppingCart, Bell } from 'lucide-react'
 import { Logo } from '@/components/shared/Logo'
 import { ThemeToggle } from '@/components/shared/ThemeToggle'
 import { useCartStore, selectTotalItems, selectStoreName } from '@/lib/store/cartStore'
 import { useAuthStore } from '@/lib/store/authStore'
 import { storeSlug } from '@/lib/stores'
+import Image from 'next/image'
+import { createClient } from '@/lib/supabase/client'
 
 const NAV_LINKS = [
   { href: '/supermarkets', label: 'Deals' },
+  { href: '/restaurants', label: 'Dining' },
   { href: '/stores', label: 'Stores' },
 ]
 
@@ -21,6 +24,32 @@ export function BuyerNavbar() {
   const totalItems = useCartStore(selectTotalItems)
   const storeName = useCartStore(selectStoreName)
   const user = useAuthStore((state) => state.user)
+
+  const [notifications, setNotifications] = useState<any[]>([])
+  const [showNotifications, setShowNotifications] = useState(false)
+
+  useEffect(() => {
+    if (!user) return
+    const fetchNotifications = async () => {
+      const supabase = createClient()
+      const { data } = await supabase
+        .from('notifications')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(10)
+      if (data) setNotifications(data)
+    }
+    fetchNotifications()
+  }, [user])
+
+  const unreadCount = notifications.filter(n => !n.is_read).length
+
+  const markAsRead = async (id: string) => {
+    const supabase = createClient()
+    await supabase.from('notifications').update({ is_read: true }).eq('id', id)
+    setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n))
+  }
 
   return (
     <header className="sticky top-0 z-50 glass border-b border-border">
@@ -68,14 +97,60 @@ export function BuyerNavbar() {
           <ThemeToggle />
           {user ? (
             <>
+              {/* Notification Bell */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowNotifications(!showNotifications)}
+                  className="relative p-2 text-muted-foreground hover:text-foreground transition-colors mr-2"
+                >
+                  <Bell size={20} />
+                  {unreadCount > 0 && (
+                    <span className="absolute top-0 right-0 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold" style={{ background: 'var(--brand)', color: 'var(--background)' }}>
+                      {unreadCount}
+                    </span>
+                  )}
+                </button>
+                {/* Notification Dropdown */}
+                {showNotifications && (
+                  <div className="absolute right-0 mt-2 w-80 bg-card border border-border rounded-xl shadow-xl z-50 overflow-hidden flex flex-col">
+                    <div className="p-3 border-b border-border font-bold text-sm">Notifications</div>
+                    <div className="max-h-80 overflow-y-auto">
+                      {notifications.length === 0 ? (
+                        <div className="p-4 text-center text-sm text-muted-foreground">No notifications yet.</div>
+                      ) : (
+                        notifications.map(n => (
+                          <div 
+                            key={n.id} 
+                            onClick={() => !n.is_read && markAsRead(n.id)}
+                            className={`p-3 border-b border-border last:border-0 hover:bg-[var(--surface)] cursor-pointer transition-colors ${!n.is_read ? 'bg-[var(--surface)]' : ''}`}
+                          >
+                            <div className="flex justify-between items-start mb-1">
+                              <span className="font-bold text-sm text-foreground">{n.title}</span>
+                              {!n.is_read && <span className="w-2 h-2 rounded-full bg-[var(--brand)] mt-1" />}
+                            </div>
+                            <p className="text-xs text-muted-foreground line-clamp-2">{n.message}</p>
+                            <span className="text-[10px] text-muted-foreground mt-2 block opacity-70">
+                              {new Date(n.created_at).toLocaleDateString()}
+                            </span>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
               <Link
                 href="/profile/orders"
                 className="text-sm font-bold text-foreground hover:text-[var(--brand)] transition-colors px-4 py-2"
               >
-                My Orders
+                Orders
               </Link>
-              <Link href="/profile/settings" className="w-8 h-8 rounded-full bg-surface border border-border flex items-center justify-center font-bold text-sm ml-2 hover:border-[var(--brand)] transition-colors" style={{ color: 'var(--brand)' }}>
-                {user.user_metadata?.full_name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || 'U'}
+              <Link href="/profile/settings" className="relative w-8 h-8 rounded-full bg-surface border border-border flex items-center justify-center font-bold text-sm ml-2 hover:border-[var(--brand)] transition-colors overflow-hidden" style={{ color: 'var(--brand)' }}>
+                {user.user_metadata?.avatar_url ? (
+                  <Image src={user.user_metadata.avatar_url} alt="Avatar" fill className="object-cover" />
+                ) : (
+                  user.user_metadata?.full_name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || 'U'
+                )}
               </Link>
             </>
           ) : (
@@ -149,7 +224,7 @@ export function BuyerNavbar() {
                 onClick={() => setIsOpen(false)}
                 className="w-full py-3 text-center rounded-xl border border-border text-sm font-medium hover:bg-surface transition-colors"
               >
-                My Orders
+                Orders
               </Link>
               <Link
                 href="/profile/settings"

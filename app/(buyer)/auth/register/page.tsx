@@ -7,6 +7,7 @@ import { Mail, Lock, User, Phone, ArrowRight, ArrowLeft, ShoppingBag, Store, Ute
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { createClient } from '@/lib/supabase/client'
 
 const registerSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Please enter a valid email'),
@@ -21,6 +22,7 @@ type RegisterFormValues = z.infer<typeof registerSchema>
 export default function RegisterPage() {
   const router = useRouter()
   const [step, setStep] = useState<1 | 2 | 3>(1)
+  const [isSuccess, setIsSuccess] = useState(false)
   
   const {
     register,
@@ -54,32 +56,48 @@ export default function RegisterPage() {
   const prevStep = () => setStep((s) => (s - 1) as 1 | 2 | 3)
 
   const handleGoogleSignup = async () => {
-    const mockUser = {
-      id: 'demo-google-123',
-      email: 'demo@restbite.app',
-      user_metadata: {
-        full_name: 'Google User',
-        role: 'buyer'
-      }
-    }
-    document.cookie = `restbite_mock_user=${encodeURIComponent(JSON.stringify(mockUser))}; path=/; max-age=86400`
-    router.push('/onboarding')
-    router.refresh()
+    const supabase = createClient()
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    })
   }
 
   const onSubmit = async (data: RegisterFormValues) => {
-    const mockUser = {
-      id: 'demo-user-123',
-      email: data.email,
-      user_metadata: {
-        full_name: data.fullName || data.email.split('@')[0],
-        role: data.role
-      }
-    }
+    const supabase = createClient()
     
-    document.cookie = `restbite_mock_user=${encodeURIComponent(JSON.stringify(mockUser))}; path=/; max-age=86400`
-    await new Promise((r) => setTimeout(r, 800))
+    // Determine the correct redirect URL based on role
+    let redirectPath = '/onboarding'
+    if (data.role === 'seller') redirectPath = '/seller/dashboard'
+    if (data.role === 'restaurant') redirectPath = '/restaurant/dashboard'
+    
+    const { data: authData, error } = await supabase.auth.signUp({
+      email: data.email,
+      password: data.password,
+      options: {
+        emailRedirectTo: `${window.location.origin}${redirectPath}`,
+        data: {
+          full_name: data.fullName,
+          phone: data.phone,
+          role: data.role,
+        }
+      }
+    })
 
+    if (error) {
+      setError('root', { message: error.message })
+      return
+    }
+
+    // If session is null, it means email confirmation is required
+    if (!authData.session) {
+      setIsSuccess(true)
+      return
+    }
+
+    // Since we need location, redirect to onboarding if role is buyer
     if (data.role === 'buyer') {
       router.push('/onboarding')
     } else if (data.role === 'seller') {
@@ -88,6 +106,29 @@ export default function RegisterPage() {
       router.push('/restaurant/dashboard')
     }
     router.refresh()
+  }
+
+  if (isSuccess) {
+    return (
+      <div className="min-h-[80vh] flex flex-col items-center justify-center px-4">
+        <div className="max-w-md w-full bg-card border border-border rounded-3xl p-8 shadow-2xl text-center">
+          <div className="w-16 h-16 bg-[rgba(200,241,53,0.1)] rounded-full flex items-center justify-center mx-auto mb-6">
+            <Mail size={32} style={{ color: 'var(--brand)' }} />
+          </div>
+          <h1 className="text-2xl font-black text-foreground mb-4">Check your email</h1>
+          <p className="text-muted-foreground text-sm mb-8 leading-relaxed">
+            We've sent a verification link to your email address. Please click the link to activate your account.
+          </p>
+          <Link 
+            href="/auth/login"
+            className="w-full flex justify-center items-center gap-2 py-3.5 rounded-xl text-sm font-black transition-all hover:brightness-95"
+            style={{ background: 'var(--brand)', color: 'var(--background)' }}
+          >
+            Go to Login <ArrowRight size={16} />
+          </Link>
+        </div>
+      </div>
+    )
   }
 
   return (

@@ -7,6 +7,7 @@ import { Mail, Lock, ArrowRight, ShieldCheck } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { createClient } from '@/lib/supabase/client'
 
 const loginSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Please enter a valid email'),
@@ -35,35 +36,42 @@ function LoginForm() {
   })
 
   const onSubmit = async (data: LoginFormValues) => {
-    // Mock Auth for now until Supabase is fully configured
-    const mockUser = {
-      id: 'demo-user-123',
+    const supabase = createClient()
+    const { error } = await supabase.auth.signInWithPassword({
       email: data.email,
-      user_metadata: {
-        full_name: data.email.split('@')[0],
-        role: 'buyer'
-      }
+      password: data.password,
+    })
+
+    if (error) {
+      setError('root', { message: error.message })
+      return
     }
-    
-    document.cookie = `restbite_mock_user=${encodeURIComponent(JSON.stringify(mockUser))}; path=/; max-age=86400`
-    
-    await new Promise((r) => setTimeout(r, 800))
-    router.push(nextParam)
+
+    // Get the user to check their role
+    const { data: { user } } = await supabase.auth.getUser()
+    const role = user?.user_metadata?.role as string | undefined
+
+    if (role === 'restaurant') {
+      router.push('/restaurant/dashboard')
+    } else if (role === 'seller') {
+      router.push('/seller/dashboard')
+    } else if (role === 'admin') {
+      router.push('/admin/dashboard')
+    } else {
+      // Buyer — use the ?next= param or fallback to profile
+      router.push(nextParam)
+    }
     router.refresh()
   }
 
   const handleGoogleLogin = async () => {
-    const mockUser = {
-      id: 'demo-google-123',
-      email: 'demo@restbite.app',
-      user_metadata: {
-        full_name: 'Google User',
-        role: 'buyer'
-      }
-    }
-    document.cookie = `restbite_mock_user=${encodeURIComponent(JSON.stringify(mockUser))}; path=/; max-age=86400`
-    router.push('/onboarding')
-    router.refresh()
+    const supabase = createClient()
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    })
   }
 
   return (

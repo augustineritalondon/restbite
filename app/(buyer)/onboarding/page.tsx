@@ -25,10 +25,21 @@ export default function OnboardingPage() {
         const { latitude, longitude } = position.coords
         
         const supabase = createClient()
-        // Save the location to user metadata
-        await supabase.auth.updateUser({
-          data: { location: { lat: latitude, lon: longitude } }
-        })
+        
+        // Get the current user
+        const { data: { user } } = await supabase.auth.getUser()
+        
+        if (user) {
+          // Save the location to the public users table
+          await supabase.from('users').update({ 
+            location: { lat: latitude, lon: longitude } 
+          }).eq('id', user.id)
+          
+          // Also save to auth metadata just in case
+          await supabase.auth.updateUser({
+            data: { location: { lat: latitude, lon: longitude } }
+          })
+        }
 
         router.push('/supermarkets')
         router.refresh()

@@ -1,15 +1,8 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
-import {
-  LayoutDashboard,
-  ShoppingBag,
-  Star,
-  BarChart2,
-  Settings,
-  LogOut,
-} from 'lucide-react'
 import { Logo } from '@/components/shared/Logo'
 import { ThemeToggle } from '@/components/shared/ThemeToggle'
+import { SignOutButton } from '@/components/shared/SignOutButton'
+import { SidebarNav } from '@/components/shared/SidebarNav'
 
 export const metadata: Metadata = {
   title: {
@@ -18,14 +11,6 @@ export const metadata: Metadata = {
   },
   description: 'Manage your listings, track orders, and grow your business on Restbite.',
 }
-
-const navItems = [
-  { label: 'Overview',   href: '/seller/dashboard',   icon: LayoutDashboard },
-  { label: 'Listings',   href: '/seller/listings',     icon: ShoppingBag },
-  { label: 'Orders',     href: '/seller/orders',       icon: Star },
-  { label: 'Analytics',  href: '/seller/analytics',    icon: BarChart2 },
-  { label: 'Settings',   href: '/seller/settings',     icon: Settings },
-]
 
 export default function SellerLayout({
   children,
@@ -55,38 +40,12 @@ export default function SellerLayout({
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 px-3 py-2 space-y-0.5">
-          {navItems.map(({ label, href, icon: Icon }) => (
-            <Link
-              key={href}
-              href={href}
-              className="
-                flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm
-                text-sidebar-foreground/70
-                hover:bg-sidebar-accent hover:text-sidebar-foreground
-                transition-colors duration-150
-              "
-            >
-              <Icon size={16} strokeWidth={1.8} />
-              {label}
-            </Link>
-          ))}
-        </nav>
+        <SidebarNav type="seller" />
 
         {/* Bottom */}
         <div className="p-3 border-t border-border space-y-0.5">
           <ThemeToggle />
-          <button
-            className="
-              w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm
-              text-sidebar-foreground/60
-              hover:bg-sidebar-accent hover:text-sidebar-foreground
-              transition-colors duration-150
-            "
-          >
-            <LogOut size={16} strokeWidth={1.8} />
-            Sign out
-          </button>
+          <SignOutButton />
         </div>
       </aside>
 
