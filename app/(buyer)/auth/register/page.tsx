@@ -57,12 +57,15 @@ export default function RegisterPage() {
 
   const handleGoogleSignup = async () => {
     const supabase = createClient()
-    await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
       },
     })
+    if (error) {
+      setError('root', { message: error.message })
+    }
   }
 
   const onSubmit = async (data: RegisterFormValues) => {
@@ -77,7 +80,7 @@ export default function RegisterPage() {
       email: data.email,
       password: data.password,
       options: {
-        emailRedirectTo: `${window.location.origin}${redirectPath}`,
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectPath)}`,
         data: {
           full_name: data.fullName,
           phone: data.phone,

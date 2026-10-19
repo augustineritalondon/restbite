@@ -64,14 +64,20 @@ function LoginForm() {
     router.refresh()
   }
 
+  const urlError = searchParams?.get('error_description') || searchParams?.get('error')
+  const errorMessage = errors.root?.message || (urlError === 'auth_callback_failed' ? 'Authentication failed or session link expired. Please try again.' : urlError)
+
   const handleGoogleLogin = async () => {
     const supabase = createClient()
-    await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
       },
     })
+    if (error) {
+      setError('root', { message: error.message })
+    }
   }
 
   return (
@@ -84,6 +90,12 @@ function LoginForm() {
       <p className="text-muted-foreground text-sm mb-8">
         Sign in to access your orders, pickup codes, and complete your checkout.
       </p>
+
+      {errorMessage && (
+        <div className="bg-[var(--urgency)]/10 text-[var(--urgency)] text-sm p-3 rounded-xl mb-6 font-medium text-center">
+          {errorMessage}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mb-6 text-left" noValidate>
         <div>
