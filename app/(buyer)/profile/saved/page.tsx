@@ -79,7 +79,7 @@ export default function SavedItemsPage() {
                   isSoldOut ? 'opacity-50 grayscale cursor-not-allowed' : 'hover:-translate-y-1 hover:border-[rgba(200,241,53,0.3)] hover:shadow-lg'
                 }`}
               >
-                <div className="h-36 relative overflow-hidden bg-[#15151F]">
+                <div className="h-36 relative overflow-hidden bg-muted">
                   <img src={product.image} alt={product.name} className={`w-full h-full object-cover transition-transform duration-500 ${!isSoldOut && 'group-hover:scale-105'}`} />
                   
                   {/* Badges */}

@@ -160,12 +160,12 @@ export default function RestaurantSessions() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1.5 bg-[#15151F] rounded-full p-1 w-fit mb-4">
+      <div className="flex gap-1.5 bg-muted border border-border rounded-full p-1 w-fit mb-4 shadow-inner">
         <button 
           onClick={() => setActiveTab('live')}
           className={`text-[13px] font-semibold px-5 py-2 rounded-full transition-all duration-200 border ${
             activeTab === 'live' 
-              ? 'bg-card text-[var(--dining)] border-[rgba(155,109,255,0.2)]' 
+              ? 'bg-card text-[var(--dining)] border-border/60 shadow-sm' 
               : 'bg-transparent text-muted-foreground border-transparent hover:text-foreground'
           }`}
         >
@@ -175,7 +175,7 @@ export default function RestaurantSessions() {
           onClick={() => setActiveTab('history')}
           className={`text-[13px] font-semibold px-5 py-2 rounded-full transition-all duration-200 border ${
             activeTab === 'history' 
-              ? 'bg-card text-[var(--dining)] border-[rgba(155,109,255,0.2)]' 
+              ? 'bg-card text-[var(--dining)] border-border/60 shadow-sm' 
               : 'bg-transparent text-muted-foreground border-transparent hover:text-foreground'
           }`}
         >

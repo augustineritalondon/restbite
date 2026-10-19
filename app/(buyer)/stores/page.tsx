@@ -29,7 +29,7 @@ export default function StoresPage() {
               style={{ animationDelay: `${i * 60}ms` }}
             >
               {/* Store image */}
-              <div className="relative h-48 overflow-hidden bg-[#15151F]">
+              <div className="relative h-48 overflow-hidden bg-muted">
                 <img
                   src={store.image}
                   alt={store.name}

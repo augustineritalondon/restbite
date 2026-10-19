@@ -55,7 +55,7 @@ export default function ProductDetailPage() {
 
           {/* ── Left: Image ── */}
           <div className="relative">
-            <div className="rounded-2xl overflow-hidden bg-[#15151F] aspect-square relative">
+            <div className="rounded-2xl overflow-hidden bg-muted aspect-square relative">
               <img
                 src={product.image}
                 alt={product.name}
@@ -169,7 +169,7 @@ export default function ProductDetailPage() {
 
             {/* Ingredients / Allergens tabs */}
             <div>
-              <div className="flex gap-1 mb-3 bg-[#15151F] rounded-xl p-1 w-fit">
+              <div className="flex gap-1 mb-3 bg-muted border border-border rounded-xl p-1 w-fit">
                 {(['ingredients', 'allergens'] as const).map(t => (
                   <button
                     key={t}
@@ -264,7 +264,7 @@ export default function ProductDetailPage() {
                     href={`/supermarkets/${p.id}`}
                     className="bg-card border border-border rounded-2xl overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:border-[rgba(200,241,53,0.3)] group"
                   >
-                    <div className="h-32 relative overflow-hidden bg-[#15151F]">
+                    <div className="h-32 relative overflow-hidden bg-muted">
                       <img src={p.image} alt={p.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                       <div className="absolute top-2 left-2 text-[9px] font-bold px-2 py-0.5 rounded-full tracking-wider backdrop-blur-sm" style={{ color: e.color, background: e.bg, border: `1px solid ${e.border}` }}>
                         {e.text}

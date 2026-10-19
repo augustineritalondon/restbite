@@ -64,12 +64,12 @@ export function MarketplaceTabs() {
       </p>
 
       {/* Tabs */}
-      <div className="flex gap-1.5 bg-[#15151F] rounded-full p-1 w-fit mb-8">
+      <div className="flex gap-1.5 bg-muted border border-border rounded-full p-1 w-fit mb-8 shadow-inner">
         <button 
           onClick={() => setActiveTab('market')}
           className={`text-[13px] font-semibold px-5 py-2 rounded-full transition-all duration-200 border ${
             activeTab === 'market' 
-              ? 'bg-card text-[var(--brand)] border-[rgba(200,241,53,0.2)]' 
+              ? 'bg-card text-[var(--brand)] border-border/60 shadow-sm' 
               : 'bg-transparent text-muted-foreground border-transparent hover:text-foreground'
           }`}
         >
@@ -79,7 +79,7 @@ export function MarketplaceTabs() {
           onClick={() => setActiveTab('dining')}
           className={`text-[13px] font-semibold px-5 py-2 rounded-full transition-all duration-200 border ${
             activeTab === 'dining' 
-              ? 'bg-card text-[var(--dining)] border-[rgba(155,109,255,0.2)]' 
+              ? 'bg-card text-[var(--dining)] border-border/60 shadow-sm' 
               : 'bg-transparent text-muted-foreground border-transparent hover:text-foreground'
           }`}
         >
@@ -94,7 +94,7 @@ export function MarketplaceTabs() {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 animate-fade-up">
             {/* Prod 1 */}
             <div className="bg-card border border-border rounded-2xl overflow-hidden cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:border-[var(--border2)]">
-              <div className="h-32 bg-[#15151F] relative border-b border-border">
+              <div className="h-32 bg-muted relative border-b border-border">
                 <img src="https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?auto=format&fit=crop&w=400&q=80" alt="Gouda cheese block" className="w-full h-full object-cover" />
                 <div className="absolute top-2 left-2 text-[9px] font-bold px-2 py-0.5 rounded-full tracking-wider bg-[var(--background)]/90 backdrop-blur-sm text-[var(--urgency)] border border-[rgba(255,107,53,0.3)]">EXPIRES TODAY</div>
                 <div className="absolute top-2 right-2 w-7 h-7 rounded-full bg-[var(--background)]/90 backdrop-blur-sm flex items-center justify-center text-muted-foreground hover:text-[var(--urgency)] transition-colors"><Heart size={14} /></div>
@@ -115,7 +115,7 @@ export function MarketplaceTabs() {
             
             {/* Prod 2 */}
             <div className="bg-card border border-border rounded-2xl overflow-hidden cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:border-[var(--border2)]">
-              <div className="h-32 bg-[#15151F] relative border-b border-border">
+              <div className="h-32 bg-muted relative border-b border-border">
                 <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=400&q=80" alt="Sourdough loaf" className="w-full h-full object-cover" />
                 <div className="absolute top-2 left-2 text-[9px] font-bold px-2 py-0.5 rounded-full tracking-wider bg-[var(--background)]/90 backdrop-blur-sm text-[var(--brand)] border border-[rgba(200,241,53,0.3)]">EXPIRES IN 2 DAYS</div>
                 <div className="absolute top-2 right-2 w-7 h-7 rounded-full bg-[var(--background)]/90 backdrop-blur-sm flex items-center justify-center text-muted-foreground hover:text-[var(--urgency)] transition-colors"><Heart size={14} /></div>
@@ -133,7 +133,7 @@ export function MarketplaceTabs() {
 
             {/* Prod 3 */}
             <div className="bg-card border border-border rounded-2xl overflow-hidden cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:border-[var(--border2)]">
-              <div className="h-32 bg-[#15151F] relative border-b border-border">
+              <div className="h-32 bg-muted relative border-b border-border">
                 <img src="https://images.unsplash.com/photo-1563636619-e9143da7973b?auto=format&fit=crop&w=400&q=80" alt="Full cream milk 2L" className="w-full h-full object-cover" />
                 <div className="absolute top-2 left-2 text-[9px] font-bold px-2 py-0.5 rounded-full tracking-wider bg-[var(--background)]/90 backdrop-blur-sm text-[var(--urgency)] border border-[rgba(255,107,53,0.3)]">EXPIRES TODAY</div>
                 <div className="absolute top-2 right-2 w-7 h-7 rounded-full bg-[var(--background)]/90 backdrop-blur-sm flex items-center justify-center text-muted-foreground hover:text-[var(--urgency)] transition-colors"><Heart size={14} /></div>
@@ -154,7 +154,7 @@ export function MarketplaceTabs() {
 
             {/* Prod 4 */}
             <div className="bg-card border border-border rounded-2xl overflow-hidden cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:border-[var(--border2)]">
-              <div className="h-32 bg-[#15151F] relative border-b border-border">
+              <div className="h-32 bg-muted relative border-b border-border">
                 <img src="https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&w=400&q=80" alt="Chicken thighs 1kg" className="w-full h-full object-cover" />
                 <div className="absolute top-2 left-2 text-[9px] font-bold px-2 py-0.5 rounded-full tracking-wider bg-[var(--background)]/90 backdrop-blur-sm text-[var(--brand)] border border-[rgba(200,241,53,0.3)]">EXPIRES IN 3 DAYS</div>
                 <div className="absolute top-2 right-2 w-7 h-7 rounded-full bg-[var(--background)]/90 backdrop-blur-sm flex items-center justify-center text-muted-foreground hover:text-[var(--urgency)] transition-colors"><Heart size={14} /></div>
@@ -172,7 +172,7 @@ export function MarketplaceTabs() {
 
             {/* Prod 5 */}
             <div className="bg-card border border-border rounded-2xl overflow-hidden cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:border-[var(--border2)]">
-              <div className="h-32 bg-[#15151F] relative border-b border-border">
+              <div className="h-32 bg-muted relative border-b border-border">
                 <img src="https://images.unsplash.com/photo-1464965911861-746a04b4bca6?auto=format&fit=crop&w=400&q=80" alt="Fresh Strawberries" className="w-full h-full object-cover" />
                 <div className="absolute top-2 left-2 text-[9px] font-bold px-2 py-0.5 rounded-full tracking-wider bg-[var(--background)]/90 backdrop-blur-sm text-[var(--urgency)] border border-[rgba(255,107,53,0.3)]">EXPIRES TODAY</div>
                 <div className="absolute top-2 right-2 w-7 h-7 rounded-full bg-[var(--background)]/90 backdrop-blur-sm flex items-center justify-center text-muted-foreground hover:text-[var(--urgency)] transition-colors"><Heart size={14} /></div>
@@ -193,7 +193,7 @@ export function MarketplaceTabs() {
 
             {/* Prod 6 */}
             <div className="bg-card border border-border rounded-2xl overflow-hidden cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:border-[var(--border2)]">
-              <div className="h-32 bg-[#15151F] relative border-b border-border">
+              <div className="h-32 bg-muted relative border-b border-border">
                 <img src="https://images.unsplash.com/photo-1588168333986-5078d3ae3976?auto=format&fit=crop&w=400&q=80" alt="Ground Beef 500g" className="w-full h-full object-cover" />
                 <div className="absolute top-2 left-2 text-[9px] font-bold px-2 py-0.5 rounded-full tracking-wider bg-[var(--background)]/90 backdrop-blur-sm text-[var(--brand)] border border-[rgba(200,241,53,0.3)]">EXPIRES IN 1 DAY</div>
                 <div className="absolute top-2 right-2 w-7 h-7 rounded-full bg-[var(--background)]/90 backdrop-blur-sm flex items-center justify-center text-muted-foreground hover:text-[var(--urgency)] transition-colors"><Heart size={14} /></div>
@@ -211,7 +211,7 @@ export function MarketplaceTabs() {
 
             {/* Prod 7 */}
             <div className="bg-card border border-border rounded-2xl overflow-hidden cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:border-[var(--border2)]">
-              <div className="h-32 bg-[#15151F] relative border-b border-border">
+              <div className="h-32 bg-muted relative border-b border-border">
                 <img src="https://images.unsplash.com/photo-1576045057995-568f588f82fb?auto=format&fit=crop&w=400&q=80" alt="Organic Spinach" className="w-full h-full object-cover" />
                 <div className="absolute top-2 left-2 text-[9px] font-bold px-2 py-0.5 rounded-full tracking-wider bg-[var(--background)]/90 backdrop-blur-sm text-[var(--urgency)] border border-[rgba(255,107,53,0.3)]">EXPIRES TODAY</div>
                 <div className="absolute top-2 right-2 w-7 h-7 rounded-full bg-[var(--background)]/90 backdrop-blur-sm flex items-center justify-center text-muted-foreground hover:text-[var(--urgency)] transition-colors"><Heart size={14} /></div>
@@ -232,7 +232,7 @@ export function MarketplaceTabs() {
 
             {/* Prod 8 */}
             <div className="bg-card border border-border rounded-2xl overflow-hidden cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:border-[var(--border2)]">
-              <div className="h-32 bg-[#15151F] relative border-b border-border">
+              <div className="h-32 bg-muted relative border-b border-border">
                 <img src="https://images.unsplash.com/photo-1571501679680-de32f1e7aad4?auto=format&fit=crop&w=400&q=80" alt="Ripe Bananas" className="w-full h-full object-cover" />
                 <div className="absolute top-2 left-2 text-[9px] font-bold px-2 py-0.5 rounded-full tracking-wider bg-[var(--background)]/90 backdrop-blur-sm text-[var(--brand)] border border-[rgba(200,241,53,0.3)]">2 DAYS</div>
                 <div className="absolute top-2 right-2 w-7 h-7 rounded-full bg-[var(--background)]/90 backdrop-blur-sm flex items-center justify-center text-muted-foreground hover:text-[var(--urgency)] transition-colors"><Heart size={14} /></div>
@@ -262,7 +262,7 @@ export function MarketplaceTabs() {
                 </div>
                 <div className="text-[15px] font-bold text-foreground mb-0.5">Native Tray</div>
                 <div className="text-[11px] text-muted-foreground">Nigerian · local cuisine · GRA Phase 2</div>
-                <div className="h-[3px] bg-white/5 rounded-full mt-3 overflow-hidden">
+                <div className="h-[3px] bg-muted rounded-full mt-3 overflow-hidden">
                   <div className="h-full bg-[var(--dining)] rounded-full transition-all duration-500 w-[60%]"></div>
                 </div>
                 <div className="flex items-center gap-2.5 mt-3 pt-3 border-t border-border">
@@ -282,7 +282,7 @@ export function MarketplaceTabs() {
                 </div>
                 <div className="text-[15px] font-bold text-foreground mb-0.5">Kilimanjaro</div>
                 <div className="text-[11px] text-muted-foreground">Continental · fast food · Peter Odili Road</div>
-                <div className="h-[3px] bg-white/5 rounded-full mt-3 overflow-hidden">
+                <div className="h-[3px] bg-muted rounded-full mt-3 overflow-hidden">
                   <div className="h-full bg-[var(--dining)] rounded-full transition-all duration-500 w-[75%]"></div>
                 </div>
                 <div className="flex items-center gap-2.5 mt-3 pt-3 border-t border-border">

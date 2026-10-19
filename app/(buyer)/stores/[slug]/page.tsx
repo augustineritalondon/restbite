@@ -31,7 +31,7 @@ export default function StoreDetailPage() {
     <div className="min-h-screen pb-20">
 
       {/* Hero banner */}
-      <div className="relative h-56 sm:h-72 overflow-hidden bg-[#15151F]">
+      <div className="relative h-56 sm:h-72 overflow-hidden bg-muted">
         <img src={store.image} alt={store.name} className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0F] via-[#0A0A0F]/40 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-6 flex items-end justify-between gap-4 flex-wrap">
@@ -135,7 +135,7 @@ export default function StoreDetailPage() {
                   href={`/supermarkets/${product.id}`}
                   className="group bg-card border border-border rounded-2xl overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:border-[rgba(200,241,53,0.3)] hover:shadow-lg"
                 >
-                  <div className="h-36 relative overflow-hidden bg-[#15151F]">
+                  <div className="h-36 relative overflow-hidden bg-muted">
                     <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                     <div className="absolute top-2 left-2 text-[9px] font-bold px-2 py-0.5 rounded-full tracking-wider backdrop-blur-sm" style={{ color: exp.color, background: exp.bg, border: `1px solid ${exp.border}` }}>
                       {exp.text}

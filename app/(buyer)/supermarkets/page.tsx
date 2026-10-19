@@ -187,7 +187,7 @@ export default function SupermarketsPage() {
                 >
                   <Link href={`/supermarkets/${product.id}`} className="block">
                     {/* Image */}
-                    <div className="h-36 relative overflow-hidden bg-[#15151F]">
+                    <div className="h-36 relative overflow-hidden bg-muted">
                       <img
                         src={product.image}
                         alt={product.name}

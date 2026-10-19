@@ -108,6 +108,7 @@
   --accent-foreground:    #F2F2F6;
   --destructive:          #FF6B35;     /* Blaze = destructive/urgency */
   --border:               color-mix(in srgb, #F2F2F6 10%, transparent);
+  --border2:              color-mix(in srgb, #F2F2F6 16%, transparent);
   --input:                color-mix(in srgb, #F2F2F6 8%, transparent);
   --ring:                 #C8F135;
 
@@ -162,6 +163,7 @@
   --accent-foreground:    #FFFFFF;
   --destructive:          #e85a1f;
   --border:               color-mix(in srgb, #0A0A0F 12%, transparent);
+  --border2:              color-mix(in srgb, #0A0A0F 18%, transparent);
   --input:                color-mix(in srgb, #0A0A0F 8%, transparent);
   --ring:                 #8ab500;
 

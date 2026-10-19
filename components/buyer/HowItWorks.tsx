@@ -41,7 +41,7 @@ export function HowItWorks() {
       
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {/* Step 1 */}
-        <div className="bg-[#0F0F1A] border border-border rounded-2xl p-6 scroll-reveal opacity-0 translate-y-8 transition-all duration-700 ease-out delay-0">
+        <div className="bg-card border border-border rounded-2xl p-6 scroll-reveal opacity-0 translate-y-8 transition-all duration-700 ease-out delay-0 shadow-sm">
           <div className="text-[11px] font-bold tracking-[0.08em] text-muted-foreground mb-3">01</div>
           <div className="text-3xl mb-3 text-[var(--brand)]"><MapPin size={32} /></div>
           <h3 className="text-[15px] font-bold mb-1.5 text-foreground">Open the app</h3>
@@ -51,7 +51,7 @@ export function HowItWorks() {
         </div>
 
         {/* Step 2 */}
-        <div className="bg-[#0F0F1A] border border-border rounded-2xl p-6 scroll-reveal opacity-0 translate-y-8 transition-all duration-700 ease-out delay-100">
+        <div className="bg-card border border-border rounded-2xl p-6 scroll-reveal opacity-0 translate-y-8 transition-all duration-700 ease-out delay-100 shadow-sm">
           <div className="text-[11px] font-bold tracking-[0.08em] text-muted-foreground mb-3">02</div>
           <div className="text-3xl mb-3 text-[var(--urgency)]"><ShoppingCart size={32} /></div>
           <h3 className="text-[15px] font-bold mb-1.5 text-foreground">Grab a deal or book a seat</h3>
@@ -61,7 +61,7 @@ export function HowItWorks() {
         </div>
 
         {/* Step 3 */}
-        <div className="bg-[#0F0F1A] border border-border rounded-2xl p-6 scroll-reveal opacity-0 translate-y-8 transition-all duration-700 ease-out delay-200">
+        <div className="bg-card border border-border rounded-2xl p-6 scroll-reveal opacity-0 translate-y-8 transition-all duration-700 ease-out delay-200 shadow-sm">
           <div className="text-[11px] font-bold tracking-[0.08em] text-muted-foreground mb-3">03</div>
           <div className="text-3xl mb-3 text-[var(--live)]"><CheckCircle2 size={32} /></div>
           <h3 className="text-[15px] font-bold mb-1.5 text-foreground">Show up and save</h3>
